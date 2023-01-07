@@ -1,9 +1,8 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"github.com/xarick/gin-sso/routes"
 )
 
 func init() {
@@ -15,16 +14,11 @@ func init() {
 
 func main() {
 
-	// db := models.Connect()
-	// r := routes.ApiRoutes(db)
-	// r.Run(os.Getenv("SERVER_RUN_PORT"))
+	route := gin.Default()
+	routes.UserRoutes(route)
 
-	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "OK",
-		})
-	})
-	r.Run()
+	// db := models.Connect()
+	route.Run()
+	// r.Run(os.Getenv("SERVER_RUN_PORT"))
 	// r.Run("172.25.0.74:8081")
 }

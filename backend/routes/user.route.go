@@ -1,23 +1,13 @@
 package routes
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	authControllers "github.com/xarick/gin-sso/controllers/auth"
 )
 
-func ApiRoutes(db *sql.DB) *gin.Engine {
-	// gin.SetMode(os.Getenv("GIN_MODE"))
-	route := gin.Default()
-
-	// route.Use(func(c *gin.Context) {
-	// 	c.Set("db", db)
-	// })
-
-	// route.Use(middleware.CORSMiddleware())
-	// route.Use(middleware.Cors())
+func UserRoutes(route *gin.Engine) {
 
 	route.GET("/", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{"page": "404"})
@@ -49,5 +39,4 @@ func ApiRoutes(db *sql.DB) *gin.Engine {
 		// 	secured.GET("/esbcrm/get-sms", inhouseControllers.GetSMS)
 		// }
 	}
-	return route
 }

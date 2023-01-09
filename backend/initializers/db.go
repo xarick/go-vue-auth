@@ -22,5 +22,6 @@ func ConnectDB(config *Config) {
 	}
 
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Role{})
 	DB = db
 }

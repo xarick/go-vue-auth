@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	authControllers "github.com/xarick/gin-sso/controllers/auth"
+	authController "github.com/xarick/gin-sso/controllers/auth"
 )
 
 func UserRoutes(route *gin.Engine) {
@@ -17,9 +17,9 @@ func UserRoutes(route *gin.Engine) {
 	{
 		auth := api.Group("/auth")
 		{
-			auth.POST("/login", authControllers.Login)
-			auth.POST("/register", authControllers.Register)
-			auth.POST("/logout", authControllers.Logout)
+			auth.POST("/login", authController.Login)
+			auth.POST("/register", authController.Register)
+			auth.POST("/logout", authController.Logout)
 		}
 
 		// secured := api.Use(middleware.AuthMiddleware())

@@ -67,7 +67,11 @@ func Register(c *gin.Context) {
 		Status:   true,
 	}
 
-	initializers.DB.Create(&newUser)
+	if err := initializers.DB.Create(&newUser).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusOK, &user)
 }
 

@@ -22,10 +22,11 @@ func main() {
 		log.Panic("Could not load environment variables", err)
 	}
 
+	initializers.ConnectDB(&config)
+
 	route := gin.Default()
 	routes.UserRoutes(route)
-
-	initializers.ConnectDB(&config)
+	routes.AdminRoutes(route)
 
 	route.Run(config.SerRunPort)
 }

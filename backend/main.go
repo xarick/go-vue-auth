@@ -1,7 +1,10 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
+	"github.com/xarick/gin-sso/initializers"
 	"github.com/xarick/gin-sso/routes"
 )
 
@@ -14,11 +17,15 @@ func init() {
 
 func main() {
 
+	config, err := initializers.LoadConfig(".")
+	if err != nil {
+		log.Panic("Could not load environment variables", err)
+	}
+
 	route := gin.Default()
 	routes.UserRoutes(route)
 
-	// db := models.Connect()
-	route.Run()
-	// r.Run(os.Getenv("SERVER_RUN_PORT"))
-	// r.Run("172.25.0.74:8081")
+	initializers.ConnectDB(&config)
+
+	route.Run(config.SerRunPort)
 }

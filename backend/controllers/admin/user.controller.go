@@ -23,7 +23,15 @@ func GetUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, &user)
+	userResponse := &models.UserResponse{
+		ID:     user.ID,
+		Name:   user.Name,
+		Email:  user.Email,
+		RoleId: user.RoleId,
+		Status: user.Status,
+	}
+
+	c.JSON(http.StatusOK, &userResponse)
 }
 
 func CreateUsers(c *gin.Context) {

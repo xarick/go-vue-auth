@@ -15,6 +15,14 @@ type User struct {
 	UpdatedAt time.Time
 }
 
+type UserResponse struct {
+	ID     uint   `json:"id,omitempty"`
+	Name   string `json:"name,omitempty"`
+	Email  string `json:"email,omitempty"`
+	RoleId int    `json:"role_id,omitempty"`
+	Status bool   `json:"status,omitempty"`
+}
+
 type SignUpUser struct {
 	Name            string `json:"name" binding:"required"`
 	Email           string `json:"email" binding:"required"`

@@ -10,7 +10,7 @@ import (
 func UserRoutes(route *gin.Engine) {
 
 	route.GET("/", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{"page": "404"})
+		context.JSON(http.StatusOK, gin.H{"page": "/"})
 	})
 
 	api := route.Group("/api")
@@ -22,21 +22,21 @@ func UserRoutes(route *gin.Engine) {
 			auth.POST("/logout", authController.Logout)
 		}
 
-		// secured := api.Use(middleware.AuthMiddleware())
+		// auth := api.Use(middleware.AuthMiddleware())
 		// {
-		// 	secured.GET("/esbbc/get-tariffs", inhouseControllers.GetTariffs)
-		// 	secured.GET("/esbbc/get-tariff-info", inhouseControllers.GetTarifInfo)
-		// 	secured.GET("/esbbc/get-tariff-with-amount", inhouseControllers.GetTariffWithAmount)
+		// 	auth.GET("/esbbc/get-tariffs", inhouseControllers.GetTariffs)
+		// 	auth.GET("/esbbc/get-tariff-info", inhouseControllers.GetTarifInfo)
+		// 	auth.GET("/esbbc/get-tariff-with-amount", inhouseControllers.GetTariffWithAmount)
 
-		// 	secured.GET("/esbca/get-jur-acc", inhouseControllers.GetJurAcc)
-		// 	secured.GET("/esbca/acc-info-short", inhouseControllers.AccInfoShort)
+		// 	auth.GET("/esbca/get-jur-acc", inhouseControllers.GetJurAcc)
+		// 	auth.GET("/esbca/acc-info-short", inhouseControllers.AccInfoShort)
 
-		// 	secured.GET("/esbhr/get-bxo-info", inhouseControllers.GetBxoInfo)
-		// 	secured.POST("/esbhr/add-sum-operand", inhouseControllers.AddSumOperand)
-		// 	secured.GET("/esbhr/check-state-operand", inhouseControllers.CheckStateOperand)
+		// 	auth.GET("/esbhr/get-bxo-info", inhouseControllers.GetBxoInfo)
+		// 	auth.POST("/esbhr/add-sum-operand", inhouseControllers.AddSumOperand)
+		// 	auth.GET("/esbhr/check-state-operand", inhouseControllers.CheckStateOperand)
 
-		// 	secured.POST("/esbcrm/send-sms", inhouseControllers.SendSMS)
-		// 	secured.GET("/esbcrm/get-sms", inhouseControllers.GetSMS)
+		// 	auth.POST("/esbcrm/send-sms", inhouseControllers.SendSMS)
+		// 	auth.GET("/esbcrm/get-sms", inhouseControllers.GetSMS)
 		// }
 	}
 }

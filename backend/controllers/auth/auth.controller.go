@@ -10,34 +10,26 @@ import (
 )
 
 func Login(c *gin.Context) {
-	var user models.SignUpUser
+	var payload models.SignInUser
 
-	if err := c.ShouldBindJSON(&user); err != nil {
+	if err := c.ShouldBindJSON(&payload); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if user.Password != user.PasswordConfirm {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Passwords do not match"})
+	var user models.User
+	result := initializers.DB.First(&user, "email = ?", payload.Email)
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email or password"})
 		return
 	}
 
-	hashedPassword, err := services.HashPassword(user.Password)
-	if err != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+	if err := services.VerifyPassword(user.Password, payload.Password); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email or password"})
 		return
 	}
 
-	newUser := models.User{
-		Name:     user.Name,
-		Email:    user.Email,
-		Password: hashedPassword,
-		RoleId:   1,
-		Status:   true,
-	}
-
-	initializers.DB.Create(&newUser)
-	c.JSON(http.StatusOK, &user)
+	c.JSON(http.StatusOK, "OK")
 }
 
 func Register(c *gin.Context) {

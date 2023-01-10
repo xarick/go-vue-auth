@@ -13,7 +13,7 @@ type Config struct {
 
 	JWTSecret  string `mapstructure:"JWT_SECRET"`
 	SerRunPort string `mapstructure:"SERVER_RUN_PORT"`
-	JWTExpTime string `mapstructure:"JWT_EXP_TIME"`
+	JWTExpTime int    `mapstructure:"JWT_EXP_TIME"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

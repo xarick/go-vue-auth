@@ -29,9 +29,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	config, _ := initializers.LoadConfig(".")
-
-	token, err := services.GenerateJWT(config.JWTSecret, config.JWTExpTime, user.ID)
+	token, err := services.GenerateJWT(user.ID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

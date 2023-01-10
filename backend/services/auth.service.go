@@ -2,24 +2,30 @@ package services
 
 import (
 	"errors"
-	"fmt"
-	"os"
+	"log"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/xarick/gin-sso/dto"
+	"github.com/xarick/gin-sso/initializers"
 )
 
-func GenerateJWT(JWTSecret string, JWTExpTime int, sub uint) (tokenString string, err error) {
+func GenerateJWT(sub uint) (tokenString string, err error) {
 
-	var JWTSecretByte = []byte(JWTSecret)
-	if len(JWTSecret) < 1 {
+	config, err := initializers.LoadConfig(".")
+	if err != nil {
+		err = errors.New("could not load environment variables")
+		return
+	}
+
+	var JWTSecretByte = []byte(config.JWTSecret)
+	if len(JWTSecretByte) < 1 {
 		err = errors.New("secret key is empty")
 		return
 	}
 
 	issuetionTime := time.Now()
-	expirationTime := time.Now().Add(time.Duration(JWTExpTime) * time.Minute)
+	expirationTime := time.Now().Add(time.Duration(config.JWTExpTime) * time.Minute)
 
 	claims := &dto.JWTClaim{
 		Sub: sub,
@@ -31,15 +37,19 @@ func GenerateJWT(JWTSecret string, JWTExpTime int, sub uint) (tokenString string
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	fmt.Println("okkkk")
-
 	tokenString, err = token.SignedString(JWTSecretByte)
 	return
 }
 
 func ValidateToken(signedToken string) (err error) {
 
-	var jwtKey = []byte(os.Getenv("JWT_SECRET"))
+	config, err := initializers.LoadConfig(".")
+	if err != nil {
+		err = errors.New("could not load environment variables")
+		return
+	}
+
+	var jwtKey = []byte(config.JWTSecret)
 	if len(jwtKey) < 1 {
 		err = errors.New("secret key is empty")
 		return
@@ -63,6 +73,17 @@ func ValidateToken(signedToken string) (err error) {
 	if claims.ExpiresAt.Unix() < time.Now().Local().Unix() {
 		err = errors.New("token expired")
 		return
+	}
+	return
+}
+
+func TokenToClaim(tokenStr string) (userID uint, err error) {
+	token, _, err := new(jwt.Parser).ParseUnverified(tokenStr, jwt.MapClaims{})
+	if err != nil {
+		log.Panic(err)
+	}
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		userID = claims["sub"].(uint)
 	}
 	return
 }

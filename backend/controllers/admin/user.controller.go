@@ -46,8 +46,27 @@ func CreateUsers(c *gin.Context) {
 		return
 	}
 
-	initializers.DB.Create(&user)
-	c.JSON(http.StatusOK, &user)
+	var count int64
+	initializers.DB.Model(&models.User{}).Where("email = ?", user.Email).Count(&count)
+	if count > 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User already exists"})
+		return
+	}
+
+	if err := initializers.DB.Create(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error adding information"})
+		return
+	}
+
+	userResponse := &models.UserResponse{
+		ID:     user.ID,
+		Name:   user.Name,
+		Email:  user.Email,
+		RoleId: user.RoleId,
+		Status: user.Status,
+	}
+
+	c.JSON(http.StatusOK, &userResponse)
 }
 
 func UpdateUsers(c *gin.Context) {

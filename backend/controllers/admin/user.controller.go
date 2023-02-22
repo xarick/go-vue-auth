@@ -9,9 +9,13 @@ import (
 )
 
 func GetUsers(c *gin.Context) {
-	users := []models.User{}
-	initializers.DB.Find(&users)
-	c.JSON(http.StatusOK, &users)
+	// users := []models.User{}
+	// initializers.DB.Find(&users)
+
+	usersResp := []models.UserResponse{}
+	initializers.DB.Model(&models.User{}).Find(&usersResp)
+
+	c.JSON(http.StatusOK, &usersResp)
 }
 
 func GetUser(c *gin.Context) {

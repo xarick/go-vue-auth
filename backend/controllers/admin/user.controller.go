@@ -47,7 +47,7 @@ func CreateUsers(c *gin.Context) {
 	}
 
 	var count int64
-	initializers.DB.Model(&models.User{}).Where("email = ?", user.Email).Count(&count)
+	initializers.DB.Model(&user).Where("email = ?", user.Email).Count(&count)
 	if count > 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User already exists"})
 		return
@@ -82,8 +82,23 @@ func UpdateUsers(c *gin.Context) {
 		return
 	}
 
-	initializers.DB.Save(&user)
-	c.JSON(http.StatusOK, &user)
+	// initializers.DB.Save(&user)
+	// c.JSON(http.StatusOK, &user)
+
+	if err := initializers.DB.Model(&user).Updates(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "An error occurred while updating"})
+		return
+	}
+
+	userResponse := &models.UserResponse{
+		ID:     user.ID,
+		Name:   user.Name,
+		Email:  user.Email,
+		RoleId: user.RoleId,
+		Status: user.Status,
+	}
+
+	c.JSON(http.StatusOK, &userResponse)
 }
 
 func DeleteUsers(c *gin.Context) {
@@ -95,5 +110,5 @@ func DeleteUsers(c *gin.Context) {
 	}
 
 	initializers.DB.Delete(&user)
-	c.JSON(http.StatusOK, &user)
+	c.JSON(http.StatusOK, gin.H{"success": "User deleted"})
 }

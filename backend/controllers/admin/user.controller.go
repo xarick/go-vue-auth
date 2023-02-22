@@ -20,7 +20,7 @@ func GetUsers(c *gin.Context) {
 
 func GetUser(c *gin.Context) {
 	var user models.User
-	initializers.DB.Where("id = ?", c.Param("id")).First(&user)
+	// initializers.DB.Where("id = ?", c.Param("id")).First(&user)
 
 	if err := initializers.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})

@@ -25,6 +25,20 @@ const router = createRouter({
             },
         },
         {
+            path: '/register',
+            query: { code: 'code' },
+            name: 'register',
+            component: () => import('../auth/Register.vue'),
+            meta: { title: "Laravel | Register" },
+            beforeEnter(to, from, next) {
+                if (is_user_logged()) {
+                    next({ name: 'home' })
+                } else {
+                    next()
+                }
+            },
+        },
+        {
             path: '/cabinet',
             name: 'cabinet',
             component: () => import('../auth/Auth.vue'),

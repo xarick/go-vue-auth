@@ -8,6 +8,8 @@ import (
 
 func AdminRoutes(route *gin.Engine) {
 
+	route.Use(middlewares.CORSMiddleware())
+
 	api := route.Group("/api")
 	{
 		admin := api.Group("/admin").Use(middlewares.AuthMiddleware())

@@ -4,12 +4,12 @@ import axios from "axios";
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     authUser: null,
-    authErrors: [],
+    authError: null,
     authStatus: null,
   }),
   getters: {
     user: (state) => state.authUser,
-    errors: (state) => state.authErrors,
+    error: (state) => state.authError,
     status: (state) => state.authStatus,
   },
   actions: {
@@ -24,7 +24,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async handleLogin(data) {
-      this.authErrors = [];
+      // this.authErrors = [];
       // await this.getToken();
 
       try {
@@ -41,21 +41,20 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async handleRegister(data) {
-      console.log(data)
-      this.authErrors = [];
+      // this.authErrors = [];
       // await this.getToken();
       try {
-        const response = await axios.post("/auth/register", {
+        await axios.post("/auth/register", {
           name: data.name,
           email: data.email,
           password: data.password,
-          password_confirmation: data.password_confirmation,
+          passwordConfirm: data.passwordConfirm,
         });
-        console.log(response);
         this.router.push("/");
       } catch (error) {
-        if (error.response.status === 422) {
-          this.authErrors = error.response.data.errors;
+        if (error.response.status != 200) {
+          this.authError = error.response.data.error;
+          console.log(error.response.data.error);
         }
       }
     },
@@ -66,7 +65,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async handleForgotPassword(email) {
-      this.authErrors = [];
+      // this.authErrors = [];
       // this.getToken();
       try {
         const response = await axios.post("/forgot-password", {
@@ -75,19 +74,19 @@ export const useAuthStore = defineStore("auth", {
         this.authStatus = response.data.status;
       } catch (error) {
         if (error.response.status === 422) {
-          this.authErrors = error.response.data.errors;
+          // this.authErrors = error.response.data.errors;
         }
       }
     },
 
     async handleResetPassword(resetData) {
-      this.authErrors = [];
+      // this.authErrors = [];
       try {
         const response = await axios.post("/reset-password", resetData);
         this.authStatus = response.data.status;
       } catch (error) {
         if (error.response.status === 422) {
-          this.authErrors = error.response.data.errors;
+          // this.authErrors = error.response.data.errors;
         }
       }
     },

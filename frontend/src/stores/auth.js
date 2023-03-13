@@ -28,14 +28,15 @@ export const useAuthStore = defineStore("auth", {
       // await this.getToken();
 
       try {
-        await axios.post("/login", {
+        const response = await axios.post("/auth/login", {
           email: data.email,
           password: data.password,
         });
+        console.log(response.data.token);
         this.router.push("/");
       } catch (error) {
-        if (error.response.status === 422) {
-          this.authErrors = error.response.data.errors;
+        if (error.response.status != 200) {
+          this.authError = error.response.data.error;
         }
       }
     },
@@ -54,7 +55,6 @@ export const useAuthStore = defineStore("auth", {
       } catch (error) {
         if (error.response.status != 200) {
           this.authError = error.response.data.error;
-          console.log(error.response.data.error);
         }
       }
     },

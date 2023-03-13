@@ -32,12 +32,12 @@ const form = ref({
               md:px-[60px]
             "
           >
-            <div class="mb-10 text-center md:mb-16">API</div>
+            <div class="mb-10 text-center md:mb-16">Register</div>
             <div v-if="authStore.authError" class="flex">
                   <span class="text-red-400 text-sm m-2 p-2">{{
                     authStore.authError
                   }}</span>
-                </div>
+            </div>
             <form @submit.prevent="authStore.handleRegister(form)">
               <div class="mb-6">
                 <input

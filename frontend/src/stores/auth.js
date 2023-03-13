@@ -18,22 +18,27 @@ export const useAuthStore = defineStore("auth", {
     // },
 
     async getUser() {
-      // await this.getToken();
-      const data = await axios.get("/api/user");
-      this.authUser = data.data;
+      const token = localStorage.getItem('token')
+      if (token) {
+        const data = await axios.get("/user/get-user", {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        this.authUser = data.data;
+      }
     },
 
     async handleLogin(data) {
-      // this.authErrors = [];
-      // await this.getToken();
-
       try {
         const response = await axios.post("/auth/login", {
           email: data.email,
           password: data.password,
         });
-        console.log(response.data.token);
-        this.router.push("/");
+        localStorage.setItem('token', response.data.token)
+        setTimeout(() => {
+          this.router.push("/");
+        }, 500);
       } catch (error) {
         if (error.response.status != 200) {
           this.authError = error.response.data.error;
@@ -42,8 +47,6 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async handleRegister(data) {
-      // this.authErrors = [];
-      // await this.getToken();
       try {
         await axios.post("/auth/register", {
           name: data.name,
@@ -61,12 +64,11 @@ export const useAuthStore = defineStore("auth", {
 
     async handleLogout() {
       await axios.post("/logout");
+      // localStorage.removeItem('token')
       this.authUser = null;
     },
 
     async handleForgotPassword(email) {
-      // this.authErrors = [];
-      // this.getToken();
       try {
         const response = await axios.post("/forgot-password", {
           email: email,
@@ -80,7 +82,6 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async handleResetPassword(resetData) {
-      // this.authErrors = [];
       try {
         const response = await axios.post("/reset-password", resetData);
         this.authStatus = response.data.status;

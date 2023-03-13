@@ -24,21 +24,9 @@ func UserRoutes(route *gin.Engine) {
 			auth.POST("/logout", authController.Logout)
 		}
 
-		// auth := api.Use(middleware.AuthMiddleware())
-		// {
-		// 	auth.GET("/esbbc/get-tariffs", inhouseControllers.GetTariffs)
-		// 	auth.GET("/esbbc/get-tariff-info", inhouseControllers.GetTarifInfo)
-		// 	auth.GET("/esbbc/get-tariff-with-amount", inhouseControllers.GetTariffWithAmount)
-
-		// 	auth.GET("/esbca/get-jur-acc", inhouseControllers.GetJurAcc)
-		// 	auth.GET("/esbca/acc-info-short", inhouseControllers.AccInfoShort)
-
-		// 	auth.GET("/esbhr/get-bxo-info", inhouseControllers.GetBxoInfo)
-		// 	auth.POST("/esbhr/add-sum-operand", inhouseControllers.AddSumOperand)
-		// 	auth.GET("/esbhr/check-state-operand", inhouseControllers.CheckStateOperand)
-
-		// 	auth.POST("/esbcrm/send-sms", inhouseControllers.SendSMS)
-		// 	auth.GET("/esbcrm/get-sms", inhouseControllers.GetSMS)
-		// }
+		user := api.Group("/user").Use(middlewares.AuthMiddleware())
+		{
+			user.GET("/get-user", authController.GetUser)
+		}
 	}
 }

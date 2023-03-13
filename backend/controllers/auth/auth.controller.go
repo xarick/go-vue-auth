@@ -76,3 +76,31 @@ func Register(c *gin.Context) {
 func Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"logout": "page"})
 }
+
+func GetUser(c *gin.Context) {
+
+	bearerToken := c.GetHeader("Authorization")
+	tokenString := bearerToken[7:]
+
+	userID, err := services.TokenToUserID(tokenString)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user models.User
+	if err := initializers.DB.Where("id = ?", userID).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
+		return
+	}
+
+	userResponse := &models.UserResponse{
+		ID:     user.ID,
+		Name:   user.Name,
+		Email:  user.Email,
+		RoleId: user.RoleId,
+		Status: user.Status,
+	}
+
+	c.JSON(http.StatusOK, &userResponse)
+}

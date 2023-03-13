@@ -77,13 +77,13 @@ func ValidateToken(signedToken string) (err error) {
 	return
 }
 
-func TokenToClaim(tokenStr string) (userID uint, err error) {
+func TokenToUserID(tokenStr string) (userID float64, err error) {
 	token, _, err := new(jwt.Parser).ParseUnverified(tokenStr, jwt.MapClaims{})
 	if err != nil {
 		log.Panic(err)
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		userID = claims["sub"].(uint)
+		userID = claims["sub"].(float64)
 	}
 	return
 }

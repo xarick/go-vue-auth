@@ -15,7 +15,7 @@ onMounted(async () => {
       <p>{{ authStore.user.email }}</p>
     </div>
     <div v-else>
-      <h1>Go and login</h1>
+      <h1>User not registered yet!</h1>
     </div>
   </div>
 </template>

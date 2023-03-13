@@ -30,9 +30,9 @@ const form = ref({
             "
           >
             <div class="mb-10 text-center md:mb-16">Login</div>
-            <div v-if="authStore.authError" class="flex">
+            <div v-if="authStore.error" class="flex">
                   <span class="text-red-400 text-sm m-2 p-2">{{
-                    authStore.authError
+                    authStore.error
                   }}</span>
             </div>
             <form @submit.prevent="authStore.handleLogin(form)">

@@ -8,7 +8,7 @@ const form = ref({
   name: "",
   email: "",
   password: "",
-  password_confirmation: "",
+  passwordConfirm: "",
 });
 </script>
 <template>
@@ -116,7 +116,7 @@ const form = ref({
                 <input
                   type="password"
                   placeholder="Password Confirmation"
-                  v-model="form.password_confirmation"
+                  v-model="form.passwordConfirm"
                   class="
                     bordder-[#E9EDF4]
                     w-full

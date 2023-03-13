@@ -13,17 +13,19 @@ export const useAuthStore = defineStore("auth", {
     status: (state) => state.authStatus,
   },
   actions: {
-    async getToken() {
-      await axios.get("/sanctum/csrf-cookie");
-    },
+    // async getToken() {
+    //   await axios.get("/sanctum/csrf-cookie");
+    // },
+
     async getUser() {
-      await this.getToken();
+      // await this.getToken();
       const data = await axios.get("/api/user");
       this.authUser = data.data;
     },
+
     async handleLogin(data) {
       this.authErrors = [];
-      await this.getToken();
+      // await this.getToken();
 
       try {
         await axios.post("/login", {
@@ -37,16 +39,19 @@ export const useAuthStore = defineStore("auth", {
         }
       }
     },
+
     async handleRegister(data) {
+      console.log(data)
       this.authErrors = [];
-      await this.getToken();
+      // await this.getToken();
       try {
-        await axios.post("/register", {
+        const response = await axios.post("/auth/register", {
           name: data.name,
           email: data.email,
           password: data.password,
           password_confirmation: data.password_confirmation,
         });
+        console.log(response);
         this.router.push("/");
       } catch (error) {
         if (error.response.status === 422) {
@@ -54,13 +59,15 @@ export const useAuthStore = defineStore("auth", {
         }
       }
     },
+
     async handleLogout() {
       await axios.post("/logout");
       this.authUser = null;
     },
+
     async handleForgotPassword(email) {
       this.authErrors = [];
-      this.getToken();
+      // this.getToken();
       try {
         const response = await axios.post("/forgot-password", {
           email: email,
@@ -72,6 +79,7 @@ export const useAuthStore = defineStore("auth", {
         }
       }
     },
+
     async handleResetPassword(resetData) {
       this.authErrors = [];
       try {
@@ -83,5 +91,6 @@ export const useAuthStore = defineStore("auth", {
         }
       }
     },
+
   },
 });

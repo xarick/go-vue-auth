@@ -1,27 +1,19 @@
-import '@/bootstrap';
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 import { createPinia } from 'pinia'
 
-import App from './App.vue'
 import router from './router'
-
-import VueCookies from 'vue-cookies'
-import naive from 'naive-ui'
-import { NMessageProvider } from 'naive-ui';
-import Navbar from '@/components/Navbar.vue'
-import Sidebar from '@/components/Sidebar.vue'
-import Footer from '@/components/Footer.vue'
-
+import App from './App.vue'
 import './assets/main.css'
+import "./axios";
 
-const app = createApp(h(NMessageProvider, () => h(App)))
+const pinia = createPinia();
+pinia.use(({ store }) => {
+    store.router = markRaw(router);
+});
 
-app.use(createPinia())
+const app = createApp(App)
+
+app.use(pinia)
 app.use(router)
-app.use(VueCookies, { expire: "7d" });
-app.use(naive);
-app.component('Navbar', Navbar)
-app.component('Sidebar', Sidebar)
-app.component('Footer', Footer)
 
 app.mount('#app')

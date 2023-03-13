@@ -1,7 +1,10 @@
 <script setup>
-import { useMessage } from 'naive-ui'
-window.useMessage = useMessage()
+import Nav from "./components/Nav.vue";
 </script>
+
 <template>
-        <RouterView />
+  <main>
+    <Nav />
+    <RouterView />
+  </main>
 </template>

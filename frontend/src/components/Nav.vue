@@ -12,6 +12,7 @@ const authStore = useAuthStore();
       <a href="#" class="flex items-center">
         API
       </a>
+      {{ authStore }}
       <button
         data-collapse-toggle="navbar-default"
         type="button"

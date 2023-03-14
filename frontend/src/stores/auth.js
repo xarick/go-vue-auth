@@ -13,10 +13,6 @@ export const useAuthStore = defineStore("auth", {
     status: (state) => state.authStatus,
   },
   actions: {
-    // async getToken() {
-    //   await axios.get("/sanctum/csrf-cookie");
-    // },
-
     async getUser() {
       const token = localStorage.getItem('token')
       if (token) {
@@ -63,8 +59,8 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async handleLogout() {
-      await axios.post("/logout");
-      // localStorage.removeItem('token')
+      // await axios.post("/logout");
+      localStorage.removeItem('token')
       this.authUser = null;
     },
 
@@ -75,8 +71,8 @@ export const useAuthStore = defineStore("auth", {
         });
         this.authStatus = response.data.status;
       } catch (error) {
-        if (error.response.status === 422) {
-          // this.authErrors = error.response.data.errors;
+        if (error.response.status != 200) {
+          this.authError = error.response.data.error;
         }
       }
     },
@@ -86,8 +82,8 @@ export const useAuthStore = defineStore("auth", {
         const response = await axios.post("/reset-password", resetData);
         this.authStatus = response.data.status;
       } catch (error) {
-        if (error.response.status === 422) {
-          // this.authErrors = error.response.data.errors;
+        if (error.response.status != 200) {
+          this.authError = error.response.data.error;
         }
       }
     },
